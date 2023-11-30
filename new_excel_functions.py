@@ -136,3 +136,11 @@ class DataExtraction:
         )
 
         return output
+    
+
+    def get_column_names_on_row(self, row:int) -> list:
+        '''
+        Esta función regresa los nombres de la columa especificada
+        '''
+        assert row >= 1, "la fila no es válida"
+        return self.df_file.loc[row].dropna().to_list()
