@@ -134,7 +134,6 @@ class DataExtraction:
             .rename(dic_to_rename_columns, axis=1)
             .reset_index(drop=True)
         )
-        print(dic_to_rename_columns)
 
         return output
     
