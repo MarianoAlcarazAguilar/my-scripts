@@ -24,7 +24,7 @@ class DataExtraction:
         sheet_name: la hoja que se desea trabajar. Por default es la active sheet.
         '''
         self.df_file = self.__open_excel_file_as_dataframe(file, sheet_name=sheet_name)
-        self.wb_file, self.ws_file = self.__open_excel_file_as_working_book(file, sheet_name=sheet_name)
+        #self.wb_file, self.ws_file = self.__open_excel_file_as_working_book(file, sheet_name=sheet_name)
 
     def __open_excel_file_as_dataframe(self, file, sheet_name=0) -> pd.DataFrame:
         '''
