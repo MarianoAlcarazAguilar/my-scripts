@@ -88,3 +88,51 @@ class DataExtraction:
         assert cell[0] >= 1, "La celda no está bien especificada"
         assert cell[1] >= 1, "La celda no está bien especificada"
         return self.df_file.loc[cell]
+
+    def extract_data_from_file(self, index_value, cols_to_extract:list, shift_between_values:int=0) -> pd.DataFrame:
+        '''
+        Esta función es la última función que vas a necesitar.
+        Solo dile cuál es el nombre de la columna que se usa como índice, el nombre de las columnas a extraer
+        y el total de celdas que exista (o no) de diferencia entre la fila de los índices y donde se encuentren
+        los valores.
+
+        Inputs:
+            - index_value: el valor de la celda donde están los índices. Debe estar a la izquierda (no inmediata necesariamente) de cols_to_extract
+            - cols_to_extract: el nombre de las columnas que quieres extraer. Por default se extrae también index_value col
+            - shift_between_values: la diferencia entre las filas donde están los índices y los valores
+
+        Returns:
+            - pd.DataFrame con los valores extraídos
+
+        Example:
+        excel_functions.extract_data_from_file('/data/file_mariano.xlsx', 'clave', ['hora_entrada', 'dia'], shift_between_values=2)
+        '''
+        # Paso 1
+        # Encontrar las filas donde están las columnas que queremos extraer
+        # Siempre extraemos el valor del index
+        cols_to_extract = [index_value] + cols_to_extract
+        dic_cells = {llave:self.find_value(llave)[0] for llave in cols_to_extract}
+
+        row_index_cell, col_index_cell = dic_cells[index_value]
+
+        # Paso 2
+        # Encontrar los índices de las columnas a extraer
+        cols_to_extract_index = [dic_cells[llave][1] for llave in cols_to_extract]
+
+        dic_to_rename_columns = {llave:valor for llave, valor in zip(cols_to_extract_index, cols_to_extract)}
+
+        # Paso 3
+        # Sacar los datos
+        output = (
+            self
+            .df_file
+            .loc[row_index_cell+1:, cols_to_extract_index]
+            .set_index(col_index_cell)
+            .shift(shift_between_values)
+            .reset_index()
+            .dropna()
+            .rename(dic_to_rename_columns, axis=1)
+            .reset_index(drop=True)
+        )
+
+        return output
