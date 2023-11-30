@@ -80,3 +80,11 @@ class DataExtraction:
 
         return result
 
+    def get_value_on_cell(self, cell:(int, int)):
+        '''
+        Esta función regresa el valor de la celda especificada
+        '''
+        assert len(cell) == 2, "La celda necesita ser de tamaño 2"
+        assert cell[0] >= 1, "La celda no está bien especificada"
+        assert cell[1] >= 1, "La celda no está bien especificada"
+        return self.df_file.loc[cell]
