@@ -54,4 +54,29 @@ class DataExtraction:
             assert sheet_name in wb.worksheets, "The given sheet does not exist"
             ws = wb[sheet_name]
         return (wb, ws)
+    
+    def find_value(self, value_to_find) -> list:
+        '''
+        Esta función se utiliza para encontrar el value_to_find en todo el excel.
+        Usa pandas para que sin importar el tamaño del archivo, el tiempo que se 
+        tarde en encontrarlo sea el mismo.
+
+        Regresa una lista de tuplas con las coordenadas convertidas a celdas de excel.
+        Ejemplo: si buscas la palabra 'hola' y aparece en la celda A1 y C3 regresa [(1,1), (3,3)]
+        Esto es importante recalcarlo porque en pandas empieza en 0, mientras que en excel empieza en 1
+
+        Si el valor no se encuetra, se regresa una lista vacía
+        '''
+
+        result = (
+            self
+            .df_file
+            .eq(value_to_find)
+            .stack()
+            .pipe(lambda df: df[df])
+            .index
+            .to_list()
+        )
+
+        return result
 
