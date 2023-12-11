@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from selenium_controler import Controler
+from my_scripts.selenium_controler import Controler
 import datetime
 import pandas as pd
 import os
