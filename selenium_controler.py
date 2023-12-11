@@ -166,6 +166,17 @@ class Controler:
             return True
         except:
             return False
+        
+    def __get_element_by(self, by:By, identifier):
+        assert self.active_controler, "Your driver is not active"
+        assert self.active_url, "Can't return object since there is no given url"
+        return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((by, identifier)))  
+    
+    def get_element_by_xpath(self, xpath:str):
+        return self.__get_element_by(by=By.XPATH, identifier=xpath)
+    
+    def get_element_by_css_selector(self, css_selector:str):
+        return self.__get_element_by(by=By.CSS_SELECTOR, identifier=css_selector)
 
 
         

@@ -15,6 +15,9 @@ class YahooScrapper:
         int_fin = int(fecha_fin.timestamp())
         return f'https://query1.finance.yahoo.com/v7/finance/download/{stock}?period1={int_inicio}&period2={int_fin}&interval=1d&events=history'
     
+    def __get_bet_url(self, stock:str):
+        return  f'https://finance.yahoo.com/quote/{stock}'
+    
     def __open_data(self, stock:str) -> pd.DataFrame:
         '''
         Esta función lee los datos descargados y elimina el csv de las descargas.
@@ -52,7 +55,7 @@ class YahooScrapper:
         # Leemos los datos
         return self.__open_data(stock=stock)
     
-    def get_historical_data(self,stock:str, fecha_inicio:str, fecha_fin:str, dayfirst:bool=True) -> pd.DataFrame:
+    def get_historical_data(self, stock:str, fecha_inicio:str, fecha_fin:str, dayfirst:bool=True) -> pd.DataFrame:
         '''
         Esta función funciona igual, pero con fechas en formato string
         '''
@@ -60,6 +63,14 @@ class YahooScrapper:
         datetime_fin = pd.to_datetime(fecha_fin, dayfirst=dayfirst)
 
         return self.get_historical_data_datetime(stock=stock, fecha_inicio=datetime_inicio, fecha_fin=datetime_fin)
+    
+    def get_beta(self, stock:str):
+        '''
+        Esta función regresa la beta de un stock
+        '''
+        url = self.__get_bet_url(stock=stock)
+        self.controlador.open_url(url)
+        return self.controlador.get_element_by_xpath('/html/body/div[1]/div/div/div[1]/div/div[3]/div[1]/div/div[1]/div/div/div/div[2]/div[2]/table/tbody/tr[2]/td[2]').text
         
 
 if __name__ == '__main__':
