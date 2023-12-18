@@ -334,15 +334,20 @@ class ExcelFunctions:
         self.adjust_column_widths(ws)
         # Guardamos el archivo procesado
         wb.save(f"{dir_location}/{file_name}.xlsx")
+        wb.close()
 
         # Una vez guardado el archivo, lo podemos regresar como bytes
-        with open(f"{dir_location}/{file_name}.xlsx", "rb") as f:
-            bytes_data = f.read()
-
         if return_data:
-            return bytes_data, f'{file_name}.xlsx'
+            return self.download_excel_file(f"{dir_location}/{file_name}.xlsx"), f'{file_name}.xlsx'
         else:
             return None, None
+        
+    def download_excel_file(self, location:str):
+        """
+        Esta función regresa el contendio de un archivo como bytes de data para poderlos descargar
+        """
+        with open(location, "rb") as f:
+            return f.read()
         
     def get_columns_on_row_repeated_names(self, working_sheet, row, num_nones_consecutivos=3, starting_col=1):
         '''
