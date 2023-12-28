@@ -89,7 +89,7 @@ class DataExtraction:
         assert cell[1] >= 1, "La celda no está bien especificada"
         return self.df_file.loc[cell]
 
-    def extract_data_from_file(self, index_value, cols_to_extract:list, shift_between_values:int=0) -> pd.DataFrame:
+    def extract_data_from_file(self, index_value, cols_to_extract:list, shift_between_values:int=0, dropna_cols:list=None) -> pd.DataFrame:
         '''
         Esta función es la última función que vas a necesitar.
         Solo dile cuál es el nombre de la columna que se usa como índice, el nombre de las columnas a extraer
@@ -100,6 +100,7 @@ class DataExtraction:
             - index_value: el valor de la celda donde están los índices. Debe estar a la izquierda (no inmediata necesariamente) de cols_to_extract
             - cols_to_extract: el nombre de las columnas que quieres extraer. Por default se extrae también index_value col
             - shift_between_values: la diferencia entre las filas donde están los índices y los valores
+            - dropna_cols: la lista de columnas sobre la que deseas hacer dropna (se usa de subset), si es None se dropea sobre todas las columnas.
 
         Returns:
             - pd.DataFrame con los valores extraídos
@@ -118,8 +119,11 @@ class DataExtraction:
         # Paso 2
         # Encontrar los índices de las columnas a extraer
         cols_to_extract_index = [dic_cells[llave][1] for llave in cols_to_extract]
-
         dic_to_rename_columns = {llave:valor for llave, valor in zip(cols_to_extract_index, cols_to_extract)}
+
+        # Paso 2.1
+        # Definimos las columnas sobre las que se hará el dropeo de los NaN
+        if dropna_cols is None: dropna_cols = cols_to_extract
 
         # Paso 3
         # Sacar los datos
@@ -130,7 +134,7 @@ class DataExtraction:
             .set_index(col_index_cell)
             .shift(shift_between_values)
             .reset_index()
-            .dropna()
+            .dropna(subset=dropna_cols)
             .rename(dic_to_rename_columns, axis=1)
             .reset_index(drop=True)
         )
