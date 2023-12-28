@@ -4,6 +4,9 @@ import pandas as pd
 import os
 
 class YahooScrapper:
+    """
+    Esta clase saca los datos de Yahoo Finance utilizando selenium
+    """
     def __init__(self, downloads_folder:str='/Users/mariano/Downloads') -> None:
         self.controlador = Controler()
         self.downloads_folder = downloads_folder # Para saber dónde se va a descargar el archivo y poderlo mover
