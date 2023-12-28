@@ -134,7 +134,7 @@ class DataExtraction:
             .set_index(col_index_cell)
             .shift(shift_between_values)
             .reset_index()
-            .dropna(subset=dropna_cols)
+            #.dropna()
             .rename(dic_to_rename_columns, axis=1)
             .reset_index(drop=True)
         )
