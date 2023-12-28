@@ -138,7 +138,6 @@ class DataExtraction:
             .dropna(subset=dropna_cols)
             .reset_index(drop=True)
         )
-        print(output.columns)
 
         return output
     
